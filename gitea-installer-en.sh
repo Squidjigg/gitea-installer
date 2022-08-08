@@ -99,7 +99,7 @@ mysql -e "FLUSH PRIVILEGES;"
 echo "//-->> Set system variables"
 export GITEA_WORK_DIR=/var/lib/gitea/ >> /dev/null 2>&1
 
-echo "//-->> Copy Gite to: /usr/local/bin/gitea (replace binary to upgrade.)"
+echo "//-->> Copy Gitea to: /usr/local/bin/gitea (replace binary to upgrade.)"
 mv gitea /usr/local/bin/gitea
 
 # create gitea as a service
