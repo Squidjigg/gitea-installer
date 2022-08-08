@@ -18,8 +18,7 @@ then
 fi
 
 
-# variablen setzen
-
+# set variables
 shell_arguments=$1
 gitea_latest_version=${1:-$(curl --silent "https://api.github.com/repos/go-gitea/gitea/releases/latest" | jq -r '.tag_name' 2>&1 | sed -e 's|.*-||' -e 's|^v||')}
 gitea_download_url_default="https://github.com/go-gitea/gitea/releases/download/v${gitea_latest_version}/gitea-${gitea_latest_version}-linux-amd64"
@@ -47,7 +46,7 @@ echo ""
 
 sleep 3s
 
-# specify your version
+# specify gitea version
 echo "Please insert your needed download-url"
 echo "Alternatively version ${gitea_latest_version} for (amd64) is used: ${gitea_download_url_default}"
 echo "Check out the available versions at: https://github.com/go-gitea/gitea/releases"
@@ -77,6 +76,7 @@ echo "//-->> Download Gitea"
 wget -q $giteadownloader -O gitea >> /dev/null 2>&1
 chmod +x gitea
 
+# create gitea folders and set permissions
 echo "//-->> Create important folder"
 mkdir -p /var/lib/gitea/custom
 mkdir -p /var/lib/gitea/data
@@ -95,15 +95,15 @@ mysql -e "CREATE DATABASE $dbtable;"
 mysql -e "GRANT ALL PRIVILEGES ON $dbtable . * TO '$dbuser'@'localhost';"
 mysql -e "FLUSH PRIVILEGES;"
 
-# systemvariable setzen
+# set system variables
 echo "//-->> Set system variables"
 export GITEA_WORK_DIR=/var/lib/gitea/ >> /dev/null 2>&1
 
 echo "//-->> Copy Gite to: /usr/local/bin/gitea (replace binary to upgrade.)"
 mv gitea /usr/local/bin/gitea
 
-# erstelle gitea als service
-echo "//-->> Create gitea-servive"
+# create gitea as a service
+echo "//-->> Create gitea-service"
 cp "$pwd/config/gitea-service.txt" "/etc/systemd/system/gitea.service"
 systemctl enable gitea >> /dev/null 2>&1
 service gitea start >> /dev/null 2>&1
@@ -124,7 +124,7 @@ fi
 
 echo ""
 echo ""
-# datenbankverbindung ausgeben
+# output database connection details
 echo "##########################################################################"
 echo "Gitea was installed successfully!"
 echo "Now, open your browser and visit: http://$deineIP:3000"
