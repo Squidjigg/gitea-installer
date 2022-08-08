@@ -1,2 +1,2 @@
 chmod 750 /etc/gitea
-chmod 660 /etc/gitea/app.ini
+chmod 640 /etc/gitea/app.ini
